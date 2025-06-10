@@ -21,6 +21,7 @@ A real-time voice interaction system that combines Speech-to-Text, Large Languag
 
 ```bash
 # Clone or download the project files
+git clone https://github.com/allwin107/AI-Voice-Agent.git
 cd ai-voice-agent
 
 # Create virtual environment
@@ -38,11 +39,17 @@ pip install -r requirements.txt
 
 ## Configuration
 
-1. Create a `.env` file with your API keys:
+Create a `.env` file with your API keys:
+
 ```
 GROQ_API_KEY=your_groq_api_key
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ```
+### Getting API Keys
+
+**Gorq (free LLM)** [console.groq.com](https://console.groq.com)
+**ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/)
+
 
 ## Project Structure
 
@@ -98,3 +105,8 @@ The system tracks several key metrics:
 
 4. Web or mobile interface integration
 
+## 📜 License
+
+This project is created for the proPAL AI Backend Engineering Internship assignment.
+
+**Built with ❤️ for proPAL AI Backend Engineering Internship**
