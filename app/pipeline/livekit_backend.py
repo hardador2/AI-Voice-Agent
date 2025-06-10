@@ -10,32 +10,36 @@ from collections import deque
 import numpy as np
 
 try:
-    # Basic LiveKit imports
-    import livekit
-    from livekit import rtc
-    
-    # Core room and participant classes
+    # Core imports
     from livekit.rtc import Room
+    from livekit.rtc.participant import LocalParticipant, RemoteParticipant
+
+    # Track and Audio imports
+    from livekit.rtc.track import (
+        LocalAudioTrack,
+        AudioTrack,        
+        )
+    from livekit.rtc.audio_source import AudioSource, AudioFrame 
+    from livekit.rtc._proto.track_pb2 import TrackKind
+    # Track kind and publication imports
+    from livekit.rtc.track_publication import (
+        TrackPublication,
+        RemoteTrackPublication,
+        LocalTrackPublication
+    )
     
-    # Audio related imports
-    from livekit.rtc import AudioTrack, LocalAudioTrack, AudioSource, AudioFrame
-    
-    # Track and publication types
-    from livekit.rtc import TrackKind, RemoteTrackPublication
-    
-    # Event types
-    from livekit.rtc import RoomEvent, ParticipantEvent
-    
-    # Token generation
-    from livekit.api import AccessToken, VideoGrants as VideoGrant
-    
+    # Auth imports
+    from livekit.api import AccessToken, VideoGrants, SIPGrants
+    from livekit.api.livekit_api import LiveKitAPI
+
     print("✓ All LiveKit imports successful")
     
 except ImportError as e:
     print(f"LiveKit import error: {e}")
     print("Please install required packages:")
-    print("pip install livekit")
+    print("pip install livekit==1.0.8")
     exit(1)
+
 
 from stt import transcribe_audio
 from llm import generate_response
@@ -48,6 +52,16 @@ LIVEKIT_API_SECRET = settings.LIVEKIT_API_SECRET
 LIVEKIT_WS_URL = settings.LIVEKIT_API_URL
 ROOM_NAME = settings.LIVEKIT_ROOM_NAME
 BOT_PARTICIPANT_NAME = settings.LIVEKIT_PARTICIPANT_NAME
+
+# Add after LiveKit Configuration section
+if not all([LIVEKIT_API_KEY, LIVEKIT_API_SECRET, LIVEKIT_WS_URL, ROOM_NAME, BOT_PARTICIPANT_NAME]):
+    missing = []
+    if not LIVEKIT_API_KEY: missing.append("LIVEKIT_API_KEY")
+    if not LIVEKIT_API_SECRET: missing.append("LIVEKIT_API_SECRET")
+    if not LIVEKIT_WS_URL: missing.append("LIVEKIT_API_URL")
+    if not ROOM_NAME: missing.append("LIVEKIT_ROOM_NAME")
+    if not BOT_PARTICIPANT_NAME: missing.append("LIVEKIT_PARTICIPANT_NAME")
+    raise ValueError(f"Missing required LiveKit configuration: {', '.join(missing)}")
 
 class VoiceAgent:
     def __init__(self):
@@ -78,34 +92,68 @@ class VoiceAgent:
 
     def generate_token(self, identity: str, room_name: str) -> str:
         """Generate LiveKit access token for the bot"""
-        token = AccessToken(api_key=LIVEKIT_API_KEY, api_secret=LIVEKIT_API_SECRET)
-        token.identity = identity
-        token.add_grant({
-            "room_join": True,
-            "room": room_name
-        })
-        return token.to_jwt()
+        try:
+            token = AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
+            token.identity = identity
+            token.name = identity 
+            
+            # Create and configure the grant
+            grant = VideoGrants(
+                room_join=True,
+                room=room_name,
+                can_publish=True,
+                can_subscribe=True
+            )
+            
+            # Set the grant
+            token.video_grant = grant
+            
+            # Generate and return the JWT token
+            jwt_token = token.to_jwt()
+            self.logger.debug(f"Generated token for {identity} in room {room_name}")
+            return jwt_token
+        except Exception as e:
+            self.logger.error(f"Error generating token: {e}")
+            raise
 
 
     async def connect(self):
         """Connect to LiveKit room and set up event handlers"""
         token = self.generate_token(identity=BOT_PARTICIPANT_NAME, room_name=ROOM_NAME)
 
-        await self.room.connect(
-            LIVEKIT_WS_URL,
-            token,
-        )
+        # Debug logging
+        self.logger.info(f"Connecting with URL: {LIVEKIT_WS_URL}")
+        self.logger.info(f"Room name: {ROOM_NAME}")
+        self.logger.info(f"Identity: {BOT_PARTICIPANT_NAME}")
+        self.logger.info(f"Generated token: {token[:20]}... (truncated for security)")
+        self.logger.info("Connecting to LiveKit...")
 
-        await self.room.local_participant.publish_track(self.local_track, "agent-voice")
+        url = LIVEKIT_WS_URL.rstrip('/')
+        if not url.startswith(('ws://', 'wss://')):
+            url = f"wss://{url}"
 
-        self.session_start_time = time.time()
-        self.logger.info(f"Connected to room '{ROOM_NAME}' as {BOT_PARTICIPANT_NAME}")
+        try:
+            # Connect with a timeout
+            connect_task = self.room.connect(url=url, token=token)
+            await asyncio.wait_for(connect_task, timeout=30.0)
 
-        # Set up event handlers
-        self.room.on("participant_connected", self.on_participant_connected)
-        self.room.on("participant_disconnected", self.on_participant_disconnected)
-        self.room.on("track_published", self.on_track_published)
+            # Publish local track
+            await self.room.local_participant.publish_track(self.local_track)
+            
+            self.session_start_time = time.time()
+            self.logger.info(f"Successfully connected to room '{ROOM_NAME}' as {BOT_PARTICIPANT_NAME}")
 
+            # Set up event handlers
+            self.room.on("participant_connected", self.on_participant_connected)
+            self.room.on("participant_disconnected", self.on_participant_disconnected)
+            self.room.on("track_published", self.on_track_published)
+            
+        except asyncio.TimeoutError:
+            self.logger.error("Connection timeout")
+            raise
+        except Exception as e:
+            self.logger.error(f"Failed to connect to LiveKit: {str(e)}")
+            raise
 
     def on_participant_connected(self, participant):
         self.logger.info(f"Participant connected: {participant.identity}")
