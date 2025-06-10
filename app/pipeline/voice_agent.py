@@ -43,20 +43,20 @@ def log_metrics_to_excel(log_path: str, transcript: str, response: str, detected
         else:
             df_combined = df_new
     except Exception as e:
-        print(f"❌ Failed reading or combining Excel: {e}")
+        print(f"Failed reading or combining Excel: {e}")
         return
 
     # === Retry logic when writing ===
     for attempt in range(3):  # Try up to 3 times
         try:
             df_combined.to_excel(log_path, index=False, engine="openpyxl")
-            print(f"✅ Metrics logged to {log_path}")
+            print(f"Metrics logged to {log_path}")
             break  # success: exit loop
         except PermissionError:
-            print(f"⚠️ Excel file is locked. Retrying in 3 seconds... (Attempt {attempt + 1}/3)")
+            print(f"Excel file is locked. Retrying in 3 seconds... (Attempt {attempt + 1}/3)")
             time.sleep(3)
         except Exception as e:
-            print(f"❌ Unexpected error during Excel write: {e}")
+            print(f"Unexpected error during Excel write: {e}")
             break
 
 
