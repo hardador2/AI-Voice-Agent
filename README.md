@@ -132,10 +132,10 @@ This is essential for testing as the "other participant"
 Steps:
 
 1. Go to the Playground URL
-2. Input the same Room Name (<your-livekit-room>)
+2. Input the same Room Name (your-livekit-room)
 3. Use your LiveKit credentials:
-4. API Key, API Secret
-5. Click Join Room
+  - API Key, API Secret
+  - Click Join Room
 
 🎙️ Now when you speak, your local VoiceAgentBot should:
 
