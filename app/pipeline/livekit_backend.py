@@ -8,22 +8,33 @@ from pathlib import Path
 import logging
 from collections import deque
 import numpy as np
-import logging
-from collections import deque
-import numpy as np
 
 try:
-    from livekit.rtc import Room, LocalParticipant, RemoteParticipant, Track, AudioTrack
-    from livekit.rtc.track import LocalAudioTrack, AudioSource
-    from livekit.rtc.track.types import TrackKind
-    from livekit.rtc.track.frame import AudioFrame
-    from livekit.rtc.participant import ParticipantEvent
-    from livekit.rtc.room import RoomEvent
-    from livekit.rtc.publication import RemoteTrackPublication
-    from livekit.tokens import AccessToken, VideoGrant
-except ImportError:
-    print("LiveKit import error. Please install required packages:")
-    print("pip install livekit-sdk")
+    # Basic LiveKit imports
+    import livekit
+    from livekit import rtc
+    
+    # Core room and participant classes
+    from livekit.rtc import Room
+    
+    # Audio related imports
+    from livekit.rtc import AudioTrack, LocalAudioTrack, AudioSource, AudioFrame
+    
+    # Track and publication types
+    from livekit.rtc import TrackKind, RemoteTrackPublication
+    
+    # Event types
+    from livekit.rtc import RoomEvent, ParticipantEvent
+    
+    # Token generation
+    from livekit.api import AccessToken, VideoGrants as VideoGrant
+    
+    print("✓ All LiveKit imports successful")
+    
+except ImportError as e:
+    print(f"LiveKit import error: {e}")
+    print("Please install required packages:")
+    print("pip install livekit")
     exit(1)
 
 from stt import transcribe_audio
