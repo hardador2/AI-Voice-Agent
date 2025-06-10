@@ -1,12 +1,12 @@
-# AI Voice Agent - proPAL AI Backend Engineering Assignment
+# AI Voice Agent - proPAL AI - Assignment
 
 A real-time voice interaction system built with LiveKit that combines Speech-to-Text, Large Language Model, and Text-to-Speech capabilities to create an interactive voice agent.
 
 ## Features
 
 - Speech-to-Text (STT) using OpenAI's Whisper
-- LLM integration with Groq (Llama3-70B model)
-- Text-to-Speech using ElevenLabs
+- Large Language Model (LLM) integration with Groq (Llama3-70B model)
+- Text-to-Speech (TTS) using ElevenLabs
 - Real-time streaming support via LiveKit
 - Comprehensive metrics tracking and logging to Excel
 - Multi-language support
@@ -71,6 +71,7 @@ LIVEKIT_API_SECRET=your_api_secret
   - `test_llm.py` - This script is used to test the LLM response generation functionality.
   - `test_tts.py` - Test the text-to-speech functionality of the application.
   - `test_agent.py` - Test script for the voice agent pipeline
+  - `test_audio` - Test .wav audio file
 - `app/config.py` - Configuration settings for the application
 - `.env` - Environment Variables
 - `README.md`
