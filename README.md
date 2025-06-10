@@ -47,8 +47,8 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ```
 ### Getting API Keys
 
-**Gorq (free LLM)** [console.groq.com](https://console.groq.com)
-**ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/)
+1. **Gorq (free LLM)** [console.groq.com](https://console.groq.com)
+2. **ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/)
 
 
 ## Project Structure
@@ -109,4 +109,4 @@ The system tracks several key metrics:
 
 This project is created for the proPAL AI Backend Engineering Internship assignment.
 
-**Built with ❤️ for proPAL AI Backend Engineering Internship**
+**Built with ❤️ for proPAL**
