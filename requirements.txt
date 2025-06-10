@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-dotenv
+openai
+pydantic
+faster-whisper
+httpx>=0.24.0
+pandas
+openpyxl
+numpy
+livekit-rtc>=0.7.0
+livekit-api>=0.5.0
+elevenlabs
+groq
+pygame
