@@ -6,6 +6,10 @@ import asyncio
 import sys
 from pathlib import Path
 
+import pandas as pd
+from datetime import datetime
+import os
+
 # Add the project root to Python path
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
@@ -14,6 +18,48 @@ sys.path.append(str(project_root))
 from stt import transcribe_audio
 from llm import generate_response
 from tts import text_to_speech
+
+def log_metrics_to_excel(log_path: str, transcript: str, response: str, detected_language: str, metrics: dict):
+    
+    """ Log metrics to an Excel file with retry logic for writing."""
+
+    log_data = {
+        "Timestamp": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+        "Transcript": [transcript],
+        "Response": [response],
+        "Detected Language": [detected_language],
+        "EOU Delay (s)": [metrics.get("EOU Delay")],
+        "TTFT (s)": [metrics.get("TTFT")],
+        "TTFB (s)": [metrics.get("TTFB")],
+        "Total Latency (s)": [metrics.get("Total Latency")]
+    }
+
+    df_new = pd.DataFrame(log_data)
+
+    try:
+        if os.path.exists(log_path):
+            df_existing = pd.read_excel(log_path)
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+        else:
+            df_combined = df_new
+    except Exception as e:
+        print(f"❌ Failed reading or combining Excel: {e}")
+        return
+
+    # === Retry logic when writing ===
+    for attempt in range(3):  # Try up to 3 times
+        try:
+            df_combined.to_excel(log_path, index=False, engine="openpyxl")
+            print(f"✅ Metrics logged to {log_path}")
+            break  # success: exit loop
+        except PermissionError:
+            print(f"⚠️ Excel file is locked. Retrying in 3 seconds... (Attempt {attempt + 1}/3)")
+            time.sleep(3)
+        except Exception as e:
+            print(f"❌ Unexpected error during Excel write: {e}")
+            break
+
+
 
 async def voice_agent_pipeline(audio_path: str, language: str = "en"):
 
@@ -67,6 +113,20 @@ async def voice_agent_pipeline(audio_path: str, language: str = "en"):
     print(f"TTFB (LLM->TTS): {ttfb:.3f} sec")
     print(f"Total Latency (STT->TTS done): {total_latency:.3f} sec")
 
+    # Log metrics to Excel
+    log_metrics_to_excel(
+        log_path="session_metrics.xlsx",
+        transcript=transcript,
+        response=response,
+        detected_language=detected_language,
+        metrics={
+            "EOU Delay": eou_delay,
+            "TTFT": ttft,
+            "TTFB": ttfb,
+            "Total Latency": total_latency
+        }
+    )
+
     return {
         "transcript": transcript,
         "detected_language": detected_language,
@@ -80,8 +140,8 @@ async def voice_agent_pipeline(audio_path: str, language: str = "en"):
         }
     }
 
+
 if __name__ == "__main__":
-    import sys
     audio_file = sys.argv[1] if len(sys.argv) > 1 else "app/test/test_audio.wav"
     # Optionally, accept language arg too
     language_arg = sys.argv[2] if len(sys.argv) > 2 else "en"
