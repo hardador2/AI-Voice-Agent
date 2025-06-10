@@ -10,11 +10,29 @@ A real-time voice interaction system that combines Speech-to-Text, Large Languag
 - Comprehensive metrics tracking and logging
 - Multi-language support
 
-## Requirements
+## Quick Start
+
+### 1. Prerequisites
+
+- Python 3.8 or higher
+- Virtual environment (recommended)
+
+### 2. Installation
+
+```bash
+# Clone or download the project files
+cd ai-voice-agent
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### Requirements
 
 Install the required dependencies:
 
-```sh
+```bash
 pip install -r requirements.txt
 ```
 
@@ -33,8 +51,15 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key
   - `llm.py` - Language model integration using Groq
   - `tts.py` - Text-to-Speech using ElevenLabs
   - `voice_agent.py` - Main voice agent pipeline
-  - `livekit_backend.py` - LiveKit real-time audio streaming
-  - `agent.py` - Voice processing pipeline
+- `app/test/` - Testing Scripts
+  - `test_stt.py` - Tests the transcription functionality of the STT (Speech-to-Text) module.
+  - `test_llm.py` - This script is used to test the LLM response generation functionality.
+  - `test_tts.py` - Test the text-to-speech functionality of the application.
+  - `test_agent.py` - Test script for the voice agent pipeline
+- `app/config.py` - Configuration settings for the application
+- `.env` - Environment Variables
+- `README.md`
+- `requirements.txt`
 
 ## Usage
 
@@ -42,7 +67,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key
 
 Test individual components:
 
-```sh
+```bash
 python app/pipeline/test_stt.py
 python app/pipeline/test_llm.py
 python app/pipeline/test_tts.py
@@ -51,7 +76,7 @@ python app/pipeline/test_agent.py
 
 ### Running the Voice Agent
 
-```sh
+```bash
 python app/pipeline/voice_agent.py
 ```
 
