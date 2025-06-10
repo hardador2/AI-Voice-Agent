@@ -7,7 +7,7 @@ A real-time voice interaction system that combines Speech-to-Text, Large Languag
 - Speech-to-Text (STT) using OpenAI's Whisper
 - LLM integration with Groq (Llama3-70B model)
 - Text-to-Speech using ElevenLabs
-- Comprehensive metrics tracking and logging
+- Comprehensive metrics tracking and logging to Excel
 - Multi-language support
 
 ## Quick Start
