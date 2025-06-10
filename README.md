@@ -53,8 +53,9 @@ LIVEKIT_API_SECRET=your_api_secret
 ```
 ### Getting API Keys
 
-1. **Gorq (free LLM)** [console.groq.com](https://console.groq.com)
-2. **ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/)
+1. **Gorq (free LLM)** [console.groq.com](https://console.groq.com) - Fast LLM inference
+2. **ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/) - Text-to-Speech
+3. **Livekit**: [LiveKit Cloud](https://cloud.livekit.io/) - Real-time communication
 
 
 ## Project Structure
@@ -103,21 +104,21 @@ Make sure you’ve done this:
 1. Activated a LiveKit Cloud instance
 2. Have the following values into .env :
 
-LIVEKIT_WS_URL=wss://<your-instance>.livekit.cloud
-LIVEKIT_API_KEY=...
-LIVEKIT_API_SECRET=...
+- LIVEKIT_WS_URL=wss://<your-instance>.livekit.cloud
+- LIVEKIT_API_KEY=...
+- LIVEKIT_API_SECRET=...
 
 ### 2. Start Your Voice Agent Locally
 
-Run your `livekit_agent.py` script from terminal:
+Run your `livekit_backend.py` script from terminal:
 
 ```bash
-python app/livekit_agent.py
+python app/pipeline/livekit_backend.py
 ```
 
 If working correctly, logs will say:
 
-Connected to room '<your-livekit-room>' as <your-participant-name>
+Connected to room `your-livekit-room` as `your-participant-name`
 
 This means the agent is live and ready to receive audio.
 
@@ -130,26 +131,18 @@ This is essential for testing as the "other participant"
 
 Steps:
 
-Go to the Playground URL
-
-Input the same Room Name (<your-livekit-room>)
-
-Use your LiveKit credentials:
-
-API Key, API Secret
-
-Click Join Room
+1. Go to the Playground URL
+2. Input the same Room Name (<your-livekit-room>)
+3. Use your LiveKit credentials:
+4. API Key, API Secret
+5. Click Join Room
 
 🎙️ Now when you speak, your local VoiceAgentBot should:
 
 1. Detect your voice
-
 2. Transcribe it
-
 3. Send it to the LLM
-
 4. Reply back via audio in real-time
-
 5. Log metrics
 
 ## Performance Metrics
@@ -163,9 +156,7 @@ The system tracks several key metrics:
 ## Future Improvements
 
 1. Smarter language detection
-
 2. Improved end-of-utterance (EOU) timing
-
 3. Web or mobile interface integration
 
 ## 📜 License
